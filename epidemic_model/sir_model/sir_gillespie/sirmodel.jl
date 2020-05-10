@@ -7,7 +7,6 @@ sirmodel = @reaction_network SIR begin
     γ, I --> R
 end β γ
 
-
 function solveSIR(u0, β, γ, time_span)
 
     p = [β, γ]
