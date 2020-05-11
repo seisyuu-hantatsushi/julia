@@ -1,4 +1,4 @@
-
+using Plots
 using StatsBase
 
 N = 10000
@@ -13,7 +13,7 @@ for i in infected
 end
 
 R0=2
-γ=1/(recover_day*contant_time_per_day)
+γ=1/recover_day
 β=γ*R0/(N-1)
 
 result = []
@@ -66,8 +66,10 @@ for d in 1:days
     push!(result, SIR)
 end
 
-plot_graph = plot(map(t->t[1][1], result),map(t->t[2][1], result))
-plot!(plot_graph, map(t->t[1][1], result),map(t->t[2][2], result))
-plot!(plot_graph, map(t->t[1][1], result),map(t->t[2][3], result))
+plot_graph = plot(map(t->t[1][1], result),map(t->t[2][1], result),
+                  title="SIR model/Random Contact R0=$R0 γ=$γ",
+                  label="Suscepible", color=:blue, legend=:left, size=(1200, 900))
+plot!(plot_graph, map(t->t[1][1], result),map(t->t[2][2], result), label="Infectious", color=:red)
+plot!(plot_graph, map(t->t[1][1], result),map(t->t[2][3], result), label="Removed", color=:green)
 
-display(plot_graph)
+png(plot_graph, "sir_randomcontact.png")
