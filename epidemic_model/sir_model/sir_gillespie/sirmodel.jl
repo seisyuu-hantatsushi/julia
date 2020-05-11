@@ -21,13 +21,14 @@ function solveSIR(u0, β, γ, time_span)
 end
 
 R0=2.0
-N=1000
+N=10000
 γ=0.1
 β=γ*R0/N
 
 sol = solveSIR([N-1,1,0], β, γ, (0, 160.0))
 
-plot_graph = plot(sol, vars=(0,1), title="SIR model/Gillespie", label="Suscepible", color=:blue, legend=:left)
+plot_graph = plot(sol, vars=(0,1), title="SIR model/Gillespie", label="Suscepible",
+                  color=:blue, seriestype=:line, legend=:left, size=(1200,900))
 plot!(plot_graph, sol, vars=(0,2), label="Infectious", color=:red)
 plot!(plot_graph, sol, vars=(0,3), label="Removed", color=:green)
 
