@@ -1,0 +1,157 @@
+\documentclass[12pt]{jsreport}
+
+\begin{document}
+\chapter{Gillespie algorithm}
+
+とある系内で,Poisson過程で発生する事象により,その系内の各個体が増減する過程を
+シミュレーションするアルゴリズムである.化学反応をシミュレーションアルゴリズムとして考案されたが,
+状態遷移表現できるので色々と適応ができる.
+
+\section{アルゴリズム}
+アルゴリズムは,事象iの単位時間あたりの発生確率を$k_i(i=1,...,n)$と置くと,
+事象の何れかが発生する時間は,Poisson過程に従い,何れか一つの事象だけが発生するという
+考えに基づく.
+\begin{enumerate}
+\item $[0,1]$の間の一様乱数,$r_1$を決定する.
+\item 次の事象が発生するまでの時間$\tau$を決定する.
+\begin{equation}
+ \tau = \frac{1}{\sum^{R}_{i=1} k_i}\ln\frac{1}{r_1}
+\end{equation}
+\item 時間$\tau$後に発生する事象を選択する.$[0,1]$の間の一様乱数,$r_2$を決定し,
+\begin{equation}
+ \frac{\sum^{j-1}_{i=1} k_i}{\sum^{R}_{i=1} k_i} < r_2 \leq \frac{\sum^{j}_{i=1} k_i}{\sum^{R}_{i=1} k_i}
+\end{equation}
+を満たす事象jが発生したとし,対応する個体の増減を行う.
+\end{enumerate}
+
+と書ける.
+
+\section{アルゴリズムの根拠}
+\subsection{Poisson過程}
+$N(t)$を時点0から時点tまでに事象が発生した回数とし,$\lambda(t)$を時点tでの強度(起こりやすさの指標)とすると,
+Poisson過程は以下のように定義する.
+\begin{enumerate}
+ \item $ P(N(0)=0) = 1$
+ \item $ P(N(t+h)-N(t) = 1) = \lambda(t)h+o(h)$
+ \item $ P(N(t+h)-N(t) \geq 2) = o(h)$
+ \item 任意の時点$t_1 < t_2 < ... < t_n$に対して,増分$N(t_2)-N(t_1),...,N(t_n)-N(t_{n-1})$が独立である.
+\end{enumerate}
+$o(\cdot)$はランダウの記号であり,$\lim_{h \to 0} o(h)/h = 0$.
+
+\begin{enumerate}
+ \item 時間が増加しないと事象が増加しない.
+ \item tからh経過後,事象が1増える確率.
+ \item 事象が2以上増えないことを示す.
+ \item 事象の発生確率は前後の状態に依存しない.
+\end{enumerate}
+
+が各式の意味である.
+
+\subsection{アルゴリズムの根拠}
+時刻$t$における系の状態を,各集団の個数$x_i(t)$の組$x(t)=(x_1(t),...,x_n(t))$と表す.
+この系の各個体が増減する事象の種類の総数を$R$とする.
+ある時点$t$で$i(i=1,...,R)$番目の事象が発生する確率を$p_i(t,x)$とする
+ある時点$t$から事象が何も発生しない連続時間を$\tau,(0 \leq \tau < \infty)$とし,
+$\tau$が経過後に$i$番目の事象が発生する確率が従う確率分布を$P(\tau,i)$とする.
+確率分布は,$\tau$の間,事象が発生しない確率と事象が発生していない起点時間$t$での事象$i$の発生確率$p_i(t,x(t))$との積である.
+$\tau$の間,事象が発生しない確率を$P_0(\tau)$とする.
+
+とある時点$t$から時点$t+\tau$にて,何れかの事象が発生する確率は,
+\begin{equation}
+ P_1(\tau) = \sum^{R}_{i=1} p_i(t,x(t))\tau
+\end{equation}
+である.
+
+では,この時点から$t$までにどの事象も発生しない確率は,
+Poisson過程の定義より,$N(t)$を時点$t$ですべての事象の発生回数とすると,
+\begin{eqnarray}
+ P(N(t+\tau)-N(t) = 0) &=& \nonumber \\
+ P_0(\tau) &=& 1 - \sum^{R}_{i=1} \left\{ p_i(t,x(t))\tau + o(\tau) \right\}
+\end{eqnarray}
+
+$\tau$を$k$で分割し,$k \to \infty$とすると,
+\begin{equation}
+ P_0(\tau) = \lim_{k \to \infty} \left[1 - \sum^{R}_{i=1} \left\{ p_i(t,x(t))\frac{\tau}{k} + o\left(\frac{\tau}{k}\right) \right\} \right]^k
+\end{equation}
+\begin{equation}
+ P_0(\tau) = \lim_{k \to \infty} \left[1 - \sum^{R}_{i=1} \left\{ p_i(t,x(t))\tau + \frac{o(\tau k^{-1})}{k^{-1}} \right\}/k \right]^k
+\end{equation}
+\begin{equation}
+ P_0(\tau) = \exp\left[- \sum^{R}_{i=1} p_i(t,x(t))\tau \right] \label{dist_exp}
+\end{equation}
+
+$P(\tau, i)dt$は時点$\tau$から微小時間$dt$経過後に$i$番目の事象が起こる確率なので,
+\begin{equation}
+ P(\tau, i)dt =  P_0(\tau)p_i(t,x(t))dt
+\end{equation}
+より,
+\begin{equation}
+ P(\tau, i) = p_i(t,x(t))\exp\left[-\sum_{n=1}^{R} p_n(t,x(t))\tau\right]
+\end{equation}
+$P(\tau, i)$が各事象がとある時点での発生確率$p_i(t,x(t))$にて表現できた.
+
+この同時確率密度分布$P(\tau, i)$は,
+\begin{equation}
+\int^{\infty}_0 \sum^{R}_{n=1} P(\tau,n)d\tau = 1 \label{int_P_t_i}
+\end{equation}
+を満たさなければいけない.
+$P_1(\tau)dt$を区間$(t,t+\tau)$内で,$R$個ある事象の何れかが起こる確率とする.
+\begin{equation}
+ P_1(\tau) = \sum^{R}_{j=1} P(\tau,j)
+\end{equation}
+$P_1(\tau)$は区間$(t,t+\tau)$にて発生する事象の確率の総和である.
+$P_2(i|\tau)$を区間$(t,t+\tau)$内で事象$i$が発生する条件付き確率とする.
+\begin{equation}
+ P_2(i|\tau) = \frac{P(\tau, i)}{\sum^{R}_{j=1} P(\tau,j)}
+\end{equation}
+
+この$P_1(\tau),P_2(i|\tau)$が,
+\begin{equation}
+\int^{\infty}_0 P_1(\tau)d\tau = 1 \label{int_P_1}
+\end{equation}
+\begin{equation}
+\sum^{R}_{i=1} P_2(i|\tau) = 1 \label{sum_P_2}
+\end{equation}
+を満たすかを確かめる.
+
+ある時点$t$にて,系の状態$x(t)$として,事象$i$が発生する確率は,$p_i(t,x(t))$
+あった.以下の関数を定義する.
+\begin{equation}
+\Lambda_i(t,x(t)) = \sum^{i}_{j=1} p_j(t,x(t)) \label{L1}
+\end{equation}
+i番目までの事象の確率の和である.特に,事象の確率の総和を,
+\begin{equation}
+\Lambda_{total}(t,x(t)) = \sum^{R}_{j=1} p_j(t,x(t))
+\end{equation}
+とおく.
+$P_1(\tau),P_2(i|\tau)$は,改めて,
+\begin{equation}
+P_1(\tau) = \Lambda_{total}(t,x(t)) \exp\left[ - \Lambda_{total}(t,x(t))\tau \right] \label{P_1}
+\end{equation}
+
+\begin{eqnarray}
+P_2(i|\tau) & = & \frac{p_i(t,x(t))}{\Lambda_{total}(t,x(t))} \label{P_2} \\
+            & = & \frac{\Lambda_i(t,x(t))-\Lambda_{i-1}(t,x(t))}{\Lambda_{total}(t,x(t))} \label{P_2_2}
+\end{eqnarray}
+
+\begin{equation}
+P_2(i|\tau) = \frac{p_i(t,x(t))}{\Lambda_{total}(t,x(t))}
+\end{equation}
+
+$P_1(\tau)$は指数分布に従う,区間$\tau$での事象の発生確率になる.
+(\ref{int_P_1})は(\ref{P_1})から得られ,(\ref{P_2})は(\ref{sum_P_2})から得られる.
+より,$P(\tau,i)=P_1(\tau)P_2(i|\tau)$から(\ref{int_P_t_i})を満たす.
+
+(\ref{dist_exp})から$\tau$は,
+\begin{eqnarray}
+ \tau & = & \frac{1}{\sum^{R}_{i=1} p_i(t,x(t))}\ln\frac{1}{P_0(\tau)} \\
+      & = & \frac{1}{\Lambda_{total}(t,x(t))}\ln\frac{1}{P_0(\tau)}
+\end{eqnarray}
+$P_0(\tau)$を$[0,1]$の一様乱数$r_1$で置き換えて,$\tau$を決定する.
+$t$から$\tau$経過した際に発生する事象$i$は,$[0,1]$の一様乱数$r_2$を決定し,
+(\ref{P_2_2})より,
+\begin{equation}
+  \frac{\Lambda_{i-1}(t,x(t))}{\Lambda_{total}(t,x(t))} \leq r_2 \leq \frac{\Lambda_i(t,x(t))}{\Lambda_{total}(t,x(t))}
+\end{equation}
+を満たす,$i$を選択する.
+\end{document}
