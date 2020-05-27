@@ -1,5 +1,7 @@
 \documentclass[12pt]{jsreport}
 
+\usepackage{url}
+
 \begin{document}
 \chapter{Gillespie algorithm}
 
@@ -154,4 +156,11 @@ $t$から$\tau$経過した際に発生する事象$i$は,$[0,1]$の一様乱数
   \frac{\Lambda_{i-1}(t,x(t))}{\Lambda_{total}(t,x(t))} \leq r_2 \leq \frac{\Lambda_i(t,x(t))}{\Lambda_{total}(t,x(t))}
 \end{equation}
 を満たす,$i$を選択する.
+
+\begin{thebibliography}{}
+ \bibitem{201314_27May20} 中岡慎治, 確率シミュレーション \url{https://www.slideshare.net/ShinjiNakaoka/0621-62918582}
+ \bibitem{201814_27May20} 柚木克行, Primers for stochastic simulation \url{http://kurodalab.bs.s.u-tokyo.ac.jp/member/Yugi/Textbook/chapter10_slide.pdf}
+ \bibitem{202014_27May20} 石川保志, ジャンプ型確率過程とその応用 講義ノート2014, 琉球大学 \url{http://www.math.u-ryukyu.ac.jp/pdf/2014/ishikawa-note.pdf}
+ \bibitem{202214_27May20} \url{https://www-cc.gakushuin.ac.jp/~20130021/mathsta/chap5.pdf}
+\end{thebibliography}
 \end{document}
