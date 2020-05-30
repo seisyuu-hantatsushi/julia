@@ -1,0 +1,27 @@
+%#BIBTEX jbibtex main
+\documentclass[a4paper,12pt]{jsbook}
+\usepackage{hhline}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsmath}	% required for `\align' (yatex added)
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{url}
+\usepackage{bussproofs}
+\usepackage{comment}
+\AtBeginDocument{\providecommand*\colonequiv{\vcentcolon\mspace{-1.2mu}\equiv}}
+
+\theoremstyle{definition}
+\newtheorem{dfn}{Def.}[section]
+\newtheorem{thm}{Th.}[section]
+\newtheorem{lemma}{Lem.}[section]
+
+\begin{document}
+\title{数値計算}
+\author{谷口和繁}
+\maketitle
+\tableofcontents
+
+\input{ode.tex}
+
+\end{document}
