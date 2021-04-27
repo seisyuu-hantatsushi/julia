@@ -90,3 +90,8 @@ jldopen("mod_signals.jld2","w") do file
     file["w_m"] = vals
 
 end
+
+rm("time.dat")
+rm("w_s.dat");
+rm("w_c.dat");
+rm("w_m.dat");
