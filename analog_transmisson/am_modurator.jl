@@ -19,7 +19,7 @@ f_w_m = open("w_m.dat", "w");
 
 for step in 1:100*1000*1000
     t = step/simparam.samplingrate
-    w_s = sin_generator(40, t)
+    w_s = (sin_generator(1200, t)+sin_generator(500, t)+sin_generator(40, t))/3
     w_c = sin_generator(954*1000, t)
     w_m = (1+mod_ratio*w_s)*w_c
     write(f_t, t)
