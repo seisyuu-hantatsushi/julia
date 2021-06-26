@@ -32,8 +32,9 @@ function main()
         stem!(fig[1,1], xs, c_s, color = params["color"], marker = params["marker"], label=params["label"])
     end
 
-    axislegend(axis)
+    axislegend(axis,   position = :rc)
     save("$graph_name.pdf", fig)
+
 end
 
 main()
