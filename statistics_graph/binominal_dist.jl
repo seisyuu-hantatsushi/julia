@@ -11,7 +11,7 @@ function binominal_prob_desity(n,p,x)
 end
 
 function main()
-
+    graph_name = "binominal_prob_mass"
     xs_max = 50
     fig = Figure(resolution = (800, 600))
     xs = 0:xs_max
@@ -31,7 +31,7 @@ function main()
     end
 
     axislegend(axis)
-    save("plot.pdf", fig)
+    save("$graph_name.pdf", fig)
 
 end
 
