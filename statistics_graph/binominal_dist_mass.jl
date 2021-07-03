@@ -13,8 +13,8 @@ end
 function main()
     graph_name = "binominal_prob_mass"
     xs_max = 50
-    fig = Figure(resolution = (800, 600))
     xs = 0:xs_max
+    fig = Figure(resolution = (800, 600))
 
     axis = Axis(fig[1,1], title = "binominal probability mass function")
 
@@ -23,10 +23,7 @@ function main()
                     Dict("prob"=>0.7, "color"=>:gray50, "marker"=>:rect,    "label"=>"p=0.7")]
 
     for params in graph_params
-        p_s::Array{Float64} = []
-        for x in xs
-            push!(p_s,binominal_prob_desity(xs_max,params["prob"],x))
-        end
+        p_s = [ binominal_prob_desity(xs_max,params["prob"],x) for x in xs ]
         stem!(fig[1,1], xs, p_s, color = params["color"], marker = params["marker"], label=params["label"])
     end
 
