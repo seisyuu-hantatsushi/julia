@@ -5,7 +5,7 @@ CairoMakie.activate!(type="pdf")
 function parse_argument()
 end
 
-function hypergeo_dist(n,M,N,x)
+function hypergeo_prob_desity(n,M,N,x)
     binomial(BigInt(M),BigInt(x))*binomial(BigInt(N),BigInt(n-x))/binomial(BigInt(M+N),BigInt(n))
 end
 
@@ -27,7 +27,7 @@ function main()
         n = params["params"]["n"]
         M = params["params"]["M"]
         N = params["params"]["N"]
-        p_s = [hypergeo_dist(n,M,N,x) for x in xs ]
+        p_s = [hypergeo_prob_desity(n,M,N,x) for x in xs ]
         stem!(fig[1,1], xs, p_s, color = params["color"], marker = params["marker"], label=params["label"])
     end
 
