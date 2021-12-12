@@ -21,7 +21,7 @@ function main()
 
     fig = Figure(resolution = (800, 600))
 
-    axis = Axis(fig[1,1], title = "normal distribution mass function")
+    axis = Axis(fig[1,1], title = "normal cumulative distribution function")
 
     for params in graph_params
         ys::Array{Float64} = []

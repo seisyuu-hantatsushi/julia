@@ -15,9 +15,8 @@ function main()
                     Dict("lambda"=>5,  "color"=>:gray30, "marker"=>:diamond, "label"=>"λ=5"),
                     Dict("lambda"=>10, "color"=>:gray50, "marker"=>:rect,    "label"=>"λ=15")]
 
-    
     fig = Figure(resolution = (800, 600))
-    
+
     axis = Axis(fig[1,1], title = "poisson probability mass function")
 
     for params in graph_params
