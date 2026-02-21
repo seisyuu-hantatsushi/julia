@@ -27,6 +27,14 @@ to_df <- function(x) {
   # data.frame / tibble
   if (is.data.frame(x)) return(x)
 
+  # ts (time series) -> time/value の2列 data.frame
+  if (is.ts(x)) {
+    return(data.frame(
+      time = as.numeric(time(x)),
+      value = as.numeric(x)
+    ))
+  }
+
   # matrix -> data.frame
   if (is.matrix(x)) return(as.data.frame(x))
 
